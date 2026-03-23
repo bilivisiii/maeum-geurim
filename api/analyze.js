@@ -30,6 +30,7 @@ export default async function handler(req, res) {
     }
   );
   const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  res.json({ content: [{ type: 'text', text }] });
+ const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+// 디버깅용: 실제 응답 확인
+res.json({ content: [{ type: 'text', text }], debug: { raw: data } });
 }
