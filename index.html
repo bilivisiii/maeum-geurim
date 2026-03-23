@@ -423,8 +423,9 @@ ${childInfo ? `[아이 정보]\n${childInfo}\n` : ''}
 if (data.error) throw new Error(data.error.message || '오류가 발생했습니다.');
 if (!data.content) throw new Error('API 응답 오류: ' + JSON.stringify(data));
 const text = data.content.find(b => b.type === 'text')?.text || '';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+if (!jsonMatch) throw new Error('분석 결과를 읽을 수 없습니다. 다시 시도해 주세요.');
+const parsed = JSON.parse(jsonMatch[0]);
     renderResults(parsed, age, gender);
   } catch (err) {
     showError(err.message || '분석 중 오류가 발생했습니다. 다시 시도해 주세요.');
