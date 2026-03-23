@@ -420,8 +420,9 @@ ${childInfo ? `[아이 정보]\n${childInfo}\n` : ''}
       body: JSON.stringify({ image: base64Image, imageType, prompt })
     });
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error?.message || '오류가 발생했습니다.');
-    const text = data.content.find(b => b.type === 'text')?.text || '';
+if (data.error) throw new Error(data.error.message || '오류가 발생했습니다.');
+if (!data.content) throw new Error('API 응답 오류: ' + JSON.stringify(data));
+const text = data.content.find(b => b.type === 'text')?.text || '';
     const clean = text.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
     renderResults(parsed, age, gender);
