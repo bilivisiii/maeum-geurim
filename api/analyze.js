@@ -61,7 +61,15 @@ ${childInfo ? `[아이 정보]\n${childInfo}\n` : ''}
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     
     // 디버깅: 원문 그대로 반환
-    return res.json({ content: [{ type: 'text', text: text || '빈응답:' + JSON.stringify(data) }] });
+    // JSON 파싱 후 다시 직렬화해서 안전하게 전달
+try {
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('JSON 없음');
+  const parsed = JSON.parse(match[0]);
+  return res.json({ content: [{ type: 'text', text: JSON.stringify(parsed) }] });
+} catch(e) {
+  return res.json({ content: [{ type: 'text', text: '파싱오류: ' + text.substring(0, 200) }] });
+}
 
   } catch (err) {
     return res.json({ content: [{ type: 'text', text: '서버오류: ' + err.message }] });
