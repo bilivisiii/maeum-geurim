@@ -80,10 +80,3 @@ ${childInfo ? `[아이 정보]\n${childInfo}\n` : ''}
     return res.json({ content: [{ type: 'text', text: '서버오류: ' + err.message }] });
   }
 }
-```
-
----
-
-⚠️ **중요!** 코드 중간에 `여기에키입력` 부분에 본인 Gemini API 키 붙여넣으세요!
-```
-`https://...?key=AIzaSy여기에본인키`
